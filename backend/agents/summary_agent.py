@@ -1,10 +1,11 @@
 # backend/agents/summary_agent.py
 
 import os
-import openai
+from openai import OpenAI
 from typing import Dict
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Use the new OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class AISummaryAgent:
     def __init__(self, analysis_result: Dict):
@@ -17,13 +18,13 @@ class AISummaryAgent:
         ]
 
         try:
-            response = openai.ChatCompletion.create(
+            response = client.chat.completions.create(
                 model="gpt-4",
                 messages=messages,
                 temperature=0.7,
                 max_tokens=300
             )
-            return response.choices[0].message["content"].strip()
+            return response.choices[0].message.content.strip()
         except Exception as e:
             print("OpenAI Summary Error:", str(e))
             return "⚠️ Summary unavailable at the moment. Please try again later."

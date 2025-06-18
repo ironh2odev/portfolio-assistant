@@ -71,3 +71,4 @@ dmypy.json
 
 # Local dev artifacts
 test_data/
+.env

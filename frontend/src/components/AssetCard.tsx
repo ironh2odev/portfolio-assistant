@@ -21,9 +21,10 @@ type AssetCardProps = {
     symbol: string
     rate: number
   }
+  sentiment?: string // 👈 NEW PROP
 }
 
-export default function AssetCard({ symbol, data, currency }: AssetCardProps) {
+export default function AssetCard({ symbol, data, currency, sentiment }: AssetCardProps) {
   const prices = data?.prices || {}
   const dates = Object.keys(prices?.Close || {})
   const closePrices = (Object.values(prices?.Close || {}) as number[]).map(
@@ -79,9 +80,23 @@ export default function AssetCard({ symbol, data, currency }: AssetCardProps) {
         })
       : rebalance
 
+  const sentimentColor = (sentiment: string) => {
+    switch (sentiment) {
+      case 'positive': return 'text-green-600'
+      case 'negative': return 'text-red-600'
+      default: return 'text-yellow-500'
+    }
+  }
+
   return (
     <div className="bg-white p-6 shadow-md rounded-lg mb-8">
-      <h2 className="text-xl font-bold text-gray-800 mb-4">{symbol}</h2>
+      <h2 className="text-xl font-bold text-gray-800 mb-1">{symbol}</h2>
+
+      {sentiment && (
+        <p className={`text-sm font-medium ${sentimentColor(sentiment)} mb-3`}>
+          Sentiment: {sentiment.toUpperCase()}
+        </p>
+      )}
 
       <div className="mb-4">
         <Line data={chartData} options={options} />

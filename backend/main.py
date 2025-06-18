@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Request
 from typing import Optional
 import ast
-import os
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -10,13 +9,18 @@ from backend.agents.market_watch import MarketWatchAgent
 from backend.agents.risk_analyzer import RiskAnalyzerAgent
 from backend.agents.explanation_agent import ExplanationAgent
 from backend.agents.rebalance_agent import RebalanceRecommender
+from backend.agents.sentiment_agent import SentimentAnalyzerAgent
+from backend.agents.forecast_agent import ForecastAgent            
 
-# ✅ Import summary route
+# ✅ Import modular route files
 from backend.routes import summary
+from backend.routes import sentiment
+from backend.routes import news
+# from backend.routes import forecast  # Uncomment only if forecast.py route exists
 
 app = FastAPI()
 
-# === CORS for Next.js frontend ===
+# === Enable CORS for Next.js frontend ===
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -25,12 +29,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# === Core market endpoint ===
+# === Core Portfolio Analysis Endpoint ===
 @app.get("/market")
 def get_market_data(symbols: str = "AAPL,GOOG", allocations: Optional[str] = None):
     symbol_list = symbols.split(",")
 
-    # Default to even split if no allocation provided
+    # Parse or default allocations
     try:
         current_allocations = ast.literal_eval(allocations) if allocations else {
             symbol: round(100 / len(symbol_list), 2) for symbol in symbol_list
@@ -38,7 +42,6 @@ def get_market_data(symbols: str = "AAPL,GOOG", allocations: Optional[str] = Non
     except (ValueError, SyntaxError):
         current_allocations = {symbol: round(100 / len(symbol_list), 2) for symbol in symbol_list}
 
-    # === Normalize allocation to decimal (0–1) ===
     normalized_allocations = {
         symbol: (current_allocations.get(symbol, 0) / 100) for symbol in symbol_list
     }
@@ -64,10 +67,35 @@ def get_market_data(symbols: str = "AAPL,GOOG", allocations: Optional[str] = Non
             "risk": risk_summary.get(symbol, {}),
             "explanation": explanations.get(symbol, "No insight available."),
             "rebalance_suggestion": rebalance_suggestions.get(symbol, "No change needed."),
-            "allocation": normalized_allocations.get(symbol, 0)  # ✅ This line is key
+            "allocation": normalized_allocations.get(symbol, 0)
         }
 
     return response
 
-# === Register Summary Agent endpoint ===
+# === Forecast Endpoint (FIXED) ===
+@app.get("/forecast")
+def forecast_price(symbol: str = "AAPL"):
+    """
+    Run offline time series forecasting on sample data (e.g., backend/data/forecast/aapl_sample_prices.csv).
+    Returns forecast in format compatible with frontend expectations.
+    """
+    try:
+        agent = ForecastAgent(symbol)
+        forecast_df = agent.predict()
+
+        # Format forecast output
+        date_list = forecast_df['ds'].dt.strftime('%Y-%m-%d').tolist()
+        price_list = forecast_df['yhat'].round(2).tolist()
+
+        return {
+            "date": date_list,
+            "price": price_list
+        }
+    except Exception as e:
+        return {"error": str(e)}
+
+# === Register modular routes ===
 app.include_router(summary.router)
+app.include_router(sentiment.router)
+app.include_router(news.router)
+# app.include_router(forecast.router)  # Optional based on your routes

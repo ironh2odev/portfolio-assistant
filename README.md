@@ -1,73 +1,88 @@
-# 🚀 Financial Portfolio Assistant
+# 🚀 AI-Powered Financial Portfolio Assistant (v1.0)
 
-A production-grade, AI-powered financial dashboard that analyzes your stock portfolio, explains risk, suggests rebalances, and offers actionable insights — built for **real-world deployment** and **freelance work with financial clients**.
-
----
-
-## ✨ What's New in V1 (`nextjs-v1`)
-
-I've upgraded from a Streamlit MVP to a **scalable, modern full-stack web app**:
-
-- ✅ **Frontend**: Next.js + Tailwind CSS (beautiful, responsive, interactive)
-- ✅ **Backend**: FastAPI + Modular AI Agents (clean architecture)
-- ✅ **Chart Visuals**: Live allocation and risk visualizations using Chart.js
-- ✅ **PDF Export**: Downloadable AI-generated portfolio reports
-- ✅ **AI Summary Agent**: GPT-powered insights about your entire portfolio
+A **production-ready, AI-driven portfolio dashboard** that analyzes your stock allocations, explains risk, suggests rebalances, forecasts future prices, and summarizes real-time financial news — built for real-world usage and client-facing demos.
 
 ---
 
-## 📜 Evolution: From MVP to V1
+## ✨ What's New in Version 1.0 (`nextjs-v1`)
 
-| Version       | Tech Stack           | Purpose                   |
-|---------------|----------------------|----------------------------|
-| `main`        | Streamlit + FastAPI  | Rapid MVP (Proof of Concept) |
-| `nextjs-v1`   | Next.js + FastAPI    | Scalable V1 (Production Ready) |
+We've upgraded from a Streamlit MVP to a scalable, full-stack architecture:
+
+| 🔧 Feature                      | ✅ Status |
+|--------------------------------|----------|
+| 🎨 Frontend                    | Next.js + Tailwind CSS |
+| ⚙️ Backend                     | FastAPI + Modular AI Agents |
+| 📊 Portfolio Charts            | Allocation + Risk (Chart.js) |
+| 📄 Export Reports              | Downloadable PDFs (html2pdf.js) |
+| 🧠 GPT-4 Summary Agent         | Smart insights from your portfolio |
+| 💡 Live Forecasting            | AI price prediction (Prophet) |
+| 🧠 Market Sentiment            | GPT-powered emotional analysis |
+| 📰 Real Financial News (RAG)   | Live headlines + GPT summaries (Finnhub + GPT-4) |
 
 ---
 
-## 🧠 Features
+## 📜 Project Evolution
 
-- 📈 Real-Time Market Data (via `yfinance`)
-- 📊 Risk Analysis: Sharpe, Volatility, Max Drawdown
-- 🧠 AI-Powered Natural Language Summaries
-- 🔄 Rebalance Recommendations
-- 📂 CSV Portfolio Upload
-- 📉 Live Charts for Allocation and Risk
-- 📄 Downloadable Summary PDF (via `html2pdf.js`)
-- 🧠 GPT-4 Summary Agent (Phase 3+)
+| Version     | Tech Stack               | Purpose                          |
+|-------------|--------------------------|----------------------------------|
+| `main`      | Streamlit + FastAPI      | Rapid MVP / Proof of Concept     |
+| `nextjs-v1` | Next.js + FastAPI        | Production-Ready Full-Stack App  |
+
+---
+
+## 🧠 Core Features
+
+- ✅ **Real-Time Market Data** from `yfinance`
+- 📊 **Risk Analysis**: Sharpe, Volatility, Max Drawdown
+- 🧠 **GPT Summary Agent**: Explains what your portfolio is doing
+- 🔄 **Rebalance Suggestions**: Smarter asset distribution
+- 📉 **Chart Visualizations**: Interactive Chart.js views
+- 📂 **CSV Upload Support**: Auto-parse user portfolios
+- 🧠 **Market Sentiment Agent**: Emotion-aware feedback
+- 📈 **Forecast Agent**: AI time-series predictions (Prophet)
+- 📰 **RAG News Agent**: Live news via Finnhub + GPT-4 summaries
+- 📄 **PDF Report Download**: Instantly export client-ready insights
 
 ---
 
 ## ⚙️ Tech Stack
 
-**Frontend**:  
-- `Next.js` + `TypeScript`  
-- `Tailwind CSS`  
-- `Chart.js`  
-- `html2pdf.js`  
-- `react-hot-toast`  
+### 💻 Frontend
+- `Next.js` + `TypeScript`
+- `Tailwind CSS`
+- `Chart.js`
+- `react-hot-toast`
+- `html2pdf.js`
 
-**Backend**:  
-- `FastAPI`  
-- `yfinance`, `pandas`  
-- Modular AI Agents (`market_watch`, `risk_analyzer`, `rebalance_agent`, `summary_agent`)
+### 🧠 Backend
+- `FastAPI`
+- `pandas`, `yfinance`, `Prophet`
+- Modular AI Agents:
+  - `market_watch_agent`
+  - `risk_analyzer_agent`
+  - `rebalance_agent`
+  - `summary_agent`
+  - `forecast_agent`
+  - `sentiment_agent`
+  - `rag_news_agent`
 
 ---
 
 ## 🚀 Getting Started
 
+### 1. Clone the Repository
+
 ```bash
-# 1. Clone the Repo
 git clone https://github.com/ironh2odev/portfolio-assistant.git
 cd portfolio-assistant
 
-# 2. Set Up Python Backend
+### 2. Set Up Python Backend (FastAPI)
 python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 uvicorn backend.main:app --reload
 
-# 3. Set Up Next.js Frontend
+### 3. Set Up Frontend (Next.js)
 cd frontend
 npm install
 npm run dev
